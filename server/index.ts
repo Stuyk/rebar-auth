@@ -1,43 +1,39 @@
 import * as alt from 'alt-server';
+import { useRebar } from '@Server/index.js';
 
-import { useDatabase } from '@Server/database/index.js';
-import { CollectionNames } from '@Server/document/shared.js';
-import { useWebview } from '@Server/player/webview.js';
-import { check, hash } from '@Server/utility/password.js';
-import { useAccountBinder } from '@Server/document/index.js';
-import { useNative } from '@Server/player/native.js';
-import { sha256 } from '@Server/utility/hash.js';
+const Rebar = useRebar();
 
 import { AuthEvents } from '../shared/authEvents.js';
 import { Account } from '../../../main/shared/types/account.js';
-import { useApi } from '../../../main/server/api/index.js';
 
 type AccountData = { token: string } & Account;
 
 const loginCallbacks: Array<(player: alt.Player) => void> = [];
 const sessionKey = 'can-authenticate';
-const db = useDatabase();
+const db = Rebar.database.useDatabase();
 
 function setAccount(player: alt.Player, account: Account) {
-    useAccountBinder(player).bind(account);
-    useWebview(player).hide('Auth');
-    useNative(player).invoke('triggerScreenblurFadeOut', 1000);
+    Rebar.document.account.useAccountBinder(player).bind(account);
+    Rebar.player.useWebview(player).hide('Auth');
+    Rebar.player.useNative(player).invoke('triggerScreenblurFadeOut', 1000);
     player.deleteMeta(sessionKey);
     player.dimension = 0;
     player.emit(AuthEvents.toClient.cameraDestroy);
 }
 
 function getHash(player: alt.Player) {
-    return sha256(player.ip + player.hwidHash + player.hwidExHash + player.socialID + player.socialClubName);
+    return Rebar.utility.sha256(
+        player.ip + player.hwidHash + player.hwidExHash + player.socialID + player.socialClubName
+    );
 }
 
 async function updateRememberMe(player: alt.Player, _id: string) {
-    await db.update<AccountData>({ _id, token: getHash(player) }, CollectionNames.Accounts);
+    await db.update<AccountData>({ _id, token: getHash(player) }, Rebar.database.CollectionNames.Accounts);
 }
 
 async function tryRememberMe(player: alt.Player): Promise<boolean> {
     const token = getHash(player);
-    const account = await db.get<AccountData>({ token }, CollectionNames.Accounts);
+    const account = await db.get<AccountData>({ token }, Rebar.database.CollectionNames.Accounts);
     if (!account) {
         return false;
     }
@@ -52,14 +48,14 @@ async function handleLogin(player: alt.Player, email: string, password: string, 
         return;
     }
 
-    const account = await db.get<Account>({ email }, CollectionNames.Accounts);
-    const webview = useWebview(player);
+    const account = await db.get<Account>({ email }, Rebar.database.CollectionNames.Accounts);
+    const webview = Rebar.player.useWebview(player);
     if (!account) {
         webview.emit(AuthEvents.fromServer.invalidLogin);
         return;
     }
 
-    if (!check(password, account.password)) {
+    if (!Rebar.utility.password.check(password, account.password)) {
         webview.emit(AuthEvents.fromServer.invalidLogin);
         return;
     }
@@ -77,20 +73,23 @@ async function handleRegister(player: alt.Player, email: string, password: strin
         return;
     }
 
-    let account = await db.get<Account>({ email }, CollectionNames.Accounts);
-    const webview = useWebview(player);
+    let account = await db.get<Account>({ email }, Rebar.database.CollectionNames.Accounts);
+    const webview = Rebar.player.useWebview(player);
     if (account) {
         webview.emit(AuthEvents.fromServer.invalidRegister);
         return;
     }
 
-    const _id = await db.create<Partial<Account>>({ email, password: hash(password) }, CollectionNames.Accounts);
+    const _id = await db.create<Partial<Account>>(
+        { email, password: Rebar.utility.password.hash(password) },
+        Rebar.database.CollectionNames.Accounts
+    );
     if (!_id) {
         webview.emit(AuthEvents.fromServer.invalidRegister);
         return;
     }
 
-    account = await db.get<Account>({ _id }, CollectionNames.Accounts);
+    account = await db.get<Account>({ _id }, Rebar.database.CollectionNames.Accounts);
     if (!account) {
         webview.emit(AuthEvents.fromServer.invalidRegister);
         return;
@@ -108,8 +107,8 @@ async function handleConnect(player: alt.Player) {
     player.dimension = player.id + 1;
     player.setMeta(sessionKey, true);
     player.emit(AuthEvents.toClient.cameraCreate);
-    useWebview(player).show('Auth', 'page');
-    useNative(player).invoke('triggerScreenblurFadeIn', 1000);
+    Rebar.player.useWebview(player).show('Auth', 'page');
+    Rebar.player.useNative(player).invoke('triggerScreenblurFadeIn', 1000);
 }
 
 alt.onClient(AuthEvents.toServer.login, handleLogin);
@@ -126,7 +125,7 @@ export function useAuth() {
     };
 }
 
-useApi().register('auth-api', useAuth);
+Rebar.useApi().register('auth-api', useAuth);
 
 declare global {
     export interface ServerPlugin {

@@ -19,6 +19,10 @@ function setAccount(player: alt.Player, account: Account) {
     player.deleteMeta(sessionKey);
     player.dimension = 0;
     player.emit(AuthEvents.toClient.cameraDestroy);
+
+    for (let cb of loginCallbacks) {
+        cb(player);
+    }
 }
 
 function getHash(player: alt.Player) {

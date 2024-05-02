@@ -26,4 +26,16 @@ setBulk({
         'auth.span.new.user': 'Új felhasználó?',
         'auth.span.existing.user': 'Van már fiókod?',
     },
+    ro: {
+        'auth.span.login': 'Autentificare',
+        'auth.span.register': 'Înregistrare',
+        'auth.span.remember': 'Nu mă uita',
+        'auth.span.bad.password': 'Detalii de acces incorecte.',
+        'auth.span.register.error': 'Ceva nu a funcționat, încearcă din nou',
+        'auth.span.email': 'Email',
+        'auth.span.password': 'Parolă',
+        'auth.span.password.again': 'Confirmă parola',
+        'auth.span.new.user': 'Crează un cont.',
+        'auth.span.existing.user': 'Am deja cont.',
+    },
 });

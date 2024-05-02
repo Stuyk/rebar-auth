@@ -125,10 +125,10 @@ export function useAuth() {
     };
 }
 
-Rebar.useApi().register('auth-api', useAuth);
-
 declare global {
     export interface ServerPlugin {
         ['auth-api']: ReturnType<typeof useAuth>;
     }
 }
+
+Rebar.useApi().register('auth-api', useAuth());

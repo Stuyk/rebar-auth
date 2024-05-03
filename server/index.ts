@@ -4,7 +4,7 @@ import { useRebar } from '@Server/index.js';
 const Rebar = useRebar();
 
 import { AuthEvents } from '../shared/authEvents.js';
-import { Account } from '../../../main/shared/types/account.js';
+import { Account } from '@Shared/types/account.js';
 
 type AccountData = { token: string } & Account;
 

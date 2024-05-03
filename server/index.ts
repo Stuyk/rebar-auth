@@ -5,6 +5,9 @@ const Rebar = useRebar();
 
 import { AuthEvents } from '../shared/authEvents.js';
 import { Account } from '@Shared/types/account.js';
+import { useTranslate } from '@Shared/translate.js';
+import '../translate/index.js';
+const { t } = useTranslate('en');
 
 type AccountData = { token: string } & Account;
 
@@ -48,7 +51,7 @@ async function tryRememberMe(player: alt.Player): Promise<boolean> {
 
 async function handleLogin(player: alt.Player, email: string, password: string, rememberMe: boolean) {
     if (!player.getMeta(sessionKey)) {
-        player.kick('Not allowed to authenticate');
+        player.kick(t('auth.kick.sessionKey'));
         return;
     }
 
@@ -73,7 +76,7 @@ async function handleLogin(player: alt.Player, email: string, password: string, 
 
 async function handleRegister(player: alt.Player, email: string, password: string) {
     if (!player.getMeta(sessionKey)) {
-        player.kick('Not allowed to authenticate');
+        player.kick(t('auth.kick.sessionKey'));
         return;
     }
 

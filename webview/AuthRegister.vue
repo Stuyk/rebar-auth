@@ -2,7 +2,7 @@
 import { ref, onMounted } from 'vue';
 import { useEvents } from '../../../../webview/composables/useEvents';
 import { AuthEvents } from '../shared/authEvents';
-import { useTranslate } from '../../../main/shared/translate';
+import { useTranslate } from '@Shared/translate';
 
 const { t } = useTranslate('en');
 

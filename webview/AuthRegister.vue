@@ -53,7 +53,7 @@ function handleInvalid() {
 }
 
 function init() {
-    events.on(AuthEvents.fromServer.invalidLogin, handleInvalid);
+    events.on(AuthEvents.fromServer.invalidRegister, handleInvalid);
 }
 
 onMounted(init);

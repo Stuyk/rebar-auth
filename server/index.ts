@@ -12,19 +12,18 @@ const { t } = useTranslate('en');
 type AccountData = { token: string } & Account;
 
 const loginCallbacks: Array<(player: alt.Player) => void> = [];
-const loggedInPlayers = [];
+const loggedInPlayers: Map<number, string> = new Map<number, string>();
 const sessionKey = 'can-authenticate';
 const db = Rebar.database.useDatabase();
 
 function setAccount(player: alt.Player, account: Account) {
-    const logPlayer = { _id: account._id };
     Rebar.document.account.useAccountBinder(player).bind(account);
     Rebar.player.useWebview(player).hide('Auth');
     Rebar.player.useNative(player).invoke('triggerScreenblurFadeOut', 1000);
     player.deleteMeta(sessionKey);
     player.dimension = 0;
     player.emit(AuthEvents.toClient.cameraDestroy);
-    loggedInPlayers.push(logPlayer);
+    loggedInPlayers[player.id] = account._id;
     for (let cb of loginCallbacks) {
         cb(player);
     }
@@ -69,14 +68,8 @@ async function handleLogin(player: alt.Player, email: string, password: string, 
         return;
     }
 
-    if (loggedInPlayers.some(player => player._id === account._id)) {
-        const date = new Date();
-        const timestamp = date.toLocaleString('en-GB')
-        const _id = await db.create({ existing_account_id: account._id, suspicious_ip: player.ip, timestamp }, "AuthPlugin_Logs");
-        const didUpdate = await db.update({ _id, existing_account_id: account._id, suspicious_ip: player.ip, timestamp: timestamp  }, "AuthPlugin_Logs");
-        if (!didUpdate) {
-            player.kick(t('auth.kick.alreadyLoggedIn'));
-        }
+    if (Object.values(loggedInPlayers).includes(account._id)){
+        player.kick(t('auth.kick.alreadyLoggedIn'));
         return;
     }
 
@@ -132,15 +125,7 @@ async function handleConnect(player: alt.Player) {
 }
 
 async function handleDisconnect(player: alt.Player) {
-    const account = Rebar.document.account.useAccount(player);
-    const accountInfo = account.get();
-    if (!accountInfo) {
-        return;
-    }
-    const index = loggedInPlayers.findIndex(player => player._id === accountInfo._id.toString());
-    if (index !== -1) {
-        loggedInPlayers.splice(index, 1);
-    }
+    delete loggedInPlayers[player.id];
 }
 
 alt.onClient(AuthEvents.toServer.login, handleLogin);

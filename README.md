@@ -11,6 +11,7 @@ They are required to submit an email and password to login after registering.
 -   pbkdf2 Password Encryption
 -   Login Tokens for Quick Reconnection
 -   English Translation File
+-   Prevent duplicate logins
 
 ## Installation
 

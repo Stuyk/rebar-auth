@@ -2,8 +2,8 @@
 import '../translate/index'; // Import translations
 
 import { ref, onMounted } from 'vue';
-import AuthLogin from './AuthLogin.vue';
-import AuthRegister from './AuthRegister.vue';
+import AuthLogin from './components/AuthLogin.vue';
+import AuthRegister from './components/AuthRegister.vue';
 
 import { useTranslate } from '../../../main/shared/translate';
 

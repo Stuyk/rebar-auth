@@ -14,6 +14,7 @@ setBulk({
         'auth.span.new.user': 'New User?',
         'auth.span.existing.user': 'Existing User?',
         'auth.kick.sessionKey': 'Not allowed to authenticate',
+        'auth.kick.alreadyLoggedIn': 'Already logged in',
     },
     hu: {
         'auth.span.login': 'Bejelentkezés',
@@ -27,6 +28,7 @@ setBulk({
         'auth.span.new.user': 'Új felhasználó?',
         'auth.span.existing.user': 'Van már fiókod?',
         'auth.kick.sessionKey': 'Not allowed to authenticate',
+        'auth.kick.alreadyLoggedIn': 'Already logged in',
     },
     ro: {
         'auth.span.login': 'Autentificare',
@@ -40,5 +42,6 @@ setBulk({
         'auth.span.new.user': 'Crează un cont.',
         'auth.span.existing.user': 'Am deja cont.',
         'auth.kick.sessionKey': 'Autentificarea nu este permisă.',
+        'auth.kick.alreadyLoggedIn': 'Ești deja autentificat.',
     },
 });

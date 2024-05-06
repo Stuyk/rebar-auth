@@ -12,6 +12,7 @@ const { t } = useTranslate('en');
 type AccountData = { token: string } & Account;
 
 const loginCallbacks: Array<(player: alt.Player) => void> = [];
+const loggedInPlayers: Map<number, string> = new Map<number, string>();
 const sessionKey = 'can-authenticate';
 const db = Rebar.database.useDatabase();
 
@@ -22,7 +23,7 @@ function setAccount(player: alt.Player, account: Account) {
     player.deleteMeta(sessionKey);
     player.dimension = 0;
     player.emit(AuthEvents.toClient.cameraDestroy);
-
+    loggedInPlayers[player.id] = account._id;
     for (let cb of loginCallbacks) {
         cb(player);
     }
@@ -64,6 +65,11 @@ async function handleLogin(player: alt.Player, email: string, password: string, 
 
     if (!Rebar.utility.password.check(password, account.password)) {
         webview.emit(AuthEvents.fromServer.invalidLogin);
+        return;
+    }
+
+    if (Object.values(loggedInPlayers).includes(account._id)){
+        player.kick(t('auth.kick.alreadyLoggedIn'));
         return;
     }
 
@@ -118,9 +124,14 @@ async function handleConnect(player: alt.Player) {
     Rebar.player.useNative(player).invoke('triggerScreenblurFadeIn', 1000);
 }
 
+async function handleDisconnect(player: alt.Player) {
+    delete loggedInPlayers[player.id];
+}
+
 alt.onClient(AuthEvents.toServer.login, handleLogin);
 alt.onClient(AuthEvents.toServer.register, handleRegister);
 alt.on('playerConnect', handleConnect);
+alt.on('playerDisconnect', handleDisconnect);
 
 export function useAuth() {
     function onLogin(callback: (player: alt.Player) => void) {

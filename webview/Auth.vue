@@ -5,7 +5,7 @@ import { ref, onMounted } from 'vue';
 import AuthLogin from './components/AuthLogin.vue';
 import AuthRegister from './components/AuthRegister.vue';
 
-import { useTranslate } from '../../../main/shared/translate';
+import { useTranslate } from '@Shared/translate';
 
 const { t } = useTranslate('en');
 

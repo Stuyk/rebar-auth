@@ -44,4 +44,18 @@ setBulk({
         'auth.kick.sessionKey': 'Autentificarea nu este permisă.',
         'auth.kick.alreadyLoggedIn': 'Ești deja autentificat.',
     },
+    uk: {
+        'auth.span.login': 'Увійти',
+        'auth.span.register': 'Реєстрація',
+        'auth.span.remember': 'Запам\'ятати',
+        'auth.span.bad.password': 'Електронна адреса або пароль неправильні',
+        'auth.span.register.error': 'Щось пішло не так, спробуйте знову',
+        'auth.span.email': 'Електронна пошта',
+        'auth.span.password': 'Пароль',
+        'auth.span.password.again': 'Повторіть пароль',
+        'auth.span.new.user': 'Новий користувач?',
+        'auth.span.existing.user': 'Існуючий користувач?',
+        'auth.kick.sessionKey': 'Авторизація заборонена',
+        'auth.kick.alreadyLoggedIn': 'Ви вже війшли',
+    },
 });

@@ -96,3 +96,12 @@ onMounted(init);
         </button>
     </div>
 </template>
+
+<style scoped>
+* {
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-variation-settings: "slnt" 0;
+    user-select: none;
+}
+</style>

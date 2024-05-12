@@ -8,7 +8,7 @@ const { t } = useTranslate('en');
 
 const events = useEvents();
 
-const rememberMe = ref(true);
+const rememberMe = ref(false);
 const allValid = ref(false);
 const isInvalid = ref(false);
 
@@ -85,3 +85,12 @@ onMounted(init);
         </button>
     </div>
 </template>
+
+<style scoped>
+* {
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-variation-settings: "slnt" 0;
+    user-select: none;
+}
+</style>

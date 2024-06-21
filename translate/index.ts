@@ -58,4 +58,18 @@ setBulk({
         'auth.kick.sessionKey': 'Авторизація заборонена',
         'auth.kick.alreadyLoggedIn': 'Ви вже війшли',
     },
+    fr: {
+        'auth.span.login': 'Se connecter',
+        'auth.span.register': 'Créer un compte',
+        'auth.span.remember': 'Se souvenir de moi',
+        'auth.span.bad.password': 'Email ou mot de passe incorrect',
+        'auth.span.register.error': "Quelque chose s'est mal passé, recommencer",
+        'auth.span.email': 'Adresse e-mail',
+        'auth.span.password': 'Mot de passe',
+        'auth.span.password.again': 'Confirmer le mot de passe',
+        'auth.span.new.user': "Nouvel utilisateur ?",
+        'auth.span.existing.user': "Compte déjà créé ?",
+        'auth.kick.sessionKey': "Vous n'êtes pas autorisé à vous connecter",
+        'auth.kick.alreadyLoggedIn': 'Vous êtes déjà connecté',
+    },
 });
